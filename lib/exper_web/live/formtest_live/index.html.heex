@@ -1,0 +1,5 @@
+    <div>
+      <.form :let={_} for={@chgSetForForms} phx-change={:search_as_you_type} phx-target="">
+      <.input name="search" value="" type="text" placeholder="Search..." phx-debounce="300" />
+      </.form>
+    </div>

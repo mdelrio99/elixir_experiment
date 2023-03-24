@@ -1,0 +1,27 @@
+<.header>
+</.header>
+
+    <div style="padding:20px; color:#FFFFEE">
+      <ul>
+      <li><.link navigate={~p"/airplanes"}>&#x2022; Airplanes</.link></li>
+      <li><.link navigate={~p"/todos"}>&#x2022; Todos</.link></li>
+      <li><.link navigate={~p"/datatable"}>&#x2022; Todos as Datatable</.link></li>
+      <li><.link navigate={~p"/api/todos"}>&#x2022; Todos as API</.link></li>
+      <li><.link navigate={~p"/export_todos"}>&#x2022; Todos as CSV</.link></li>
+      <li><.link navigate={~p"/anim"}>&#x2022; Animated Stuff</.link></li>
+      </ul>
+    </div>
+
+    <div id="backgroundXXX" style="display:none">clouds.jpg</div>
+
+  <div phx-track-static
+      id="bgElement"
+      style="background-image: url('/assets/i/clouds.jpg');
+        min-height:100vh; min-width:100vw;
+        over-flow:hidden;
+        position:absolute; top:0px; left:0px;
+        background-size: cover;
+        opacity:.5;
+        z-index:-1000"
+  >
+  </div>

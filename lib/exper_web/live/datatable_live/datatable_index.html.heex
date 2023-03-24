@@ -1,0 +1,148 @@
+    <div id="backgroundXXXX" style="display:none">tasks-to-do.jpeg</div>
+  <div style="background-color: gray;
+          min-height:130vh; min-width:100vw;
+        over-flow:hidden;
+        position:absolute; top:0px; left:0px;
+        z-index:-1001"
+  >
+  <div id="bgElement"
+      style="background-image: url('/assets/i/tasks-to-do.jpeg');
+        min-height:130vh; min-width:100vw;
+        over-flow:hidden;
+        position:absolute; top:0px; left:0px;
+        background-size: cover;
+        background-repeat: repeat;
+        background-color: slate;
+        background-attachment: fixed;
+        opacity:.5;
+        z-index:-1002"
+  >
+  </div>
+  </div>
+
+
+<div style="background-color:#DDDDAA; min-width:736px; padding:4px; opacity:0.92; overflow:hidden">
+<.header>
+  Todos
+  <:actions>
+    <.link patch={~p"/datatable/new"}>
+      <.button style="background-color:#448844; line-height:18px">New Todo</.button>
+    </.link>
+    <.button style="background-color:#888888; line-height:18px" phx-click="backup-to-csv-ordered" onclick="FlashScreen()">Backup</.button>
+    <.button style="background-color:#888888; line-height:18px" phx-click="import-from-csv" onclick="FlashScreen()">Import</.button>
+  </:actions>
+</.header>
+
+
+        <%   colInfo = [ %{dbKey: :task,     colLabel: "Task", style: "cursor:pointer; min-width:200px"},
+                         %{dbKey: :priority, colLabel: "Priority", style: "cursor:pointer; "},
+                         %{dbKey: :status,   colLabel: "Status", style: "cursor:pointer; white-space: nowrap"},
+                         %{dbKey: :category, colLabel: "Category", style: "cursor:pointer; "}  ]
+        %>
+
+    <div style="width:99%">
+      <.form :let={_} for={@chgSetForForms} phx-change={:search_as_you_type} >
+      <.input id="search" name="search" value={@search} type="text" placeholder="Search..." phx-debounce="210"
+      size="50" class="bg-gray-700 text-white" style="margin-left:5px; padding:2px; margin-top:5px; line-height:22px; background-color:#374151; color:white"/>
+      </.form>
+    </div>
+
+    <%= if assigns.data == [] do %>
+    <div style="margin-top:5px; margin-left:10px"> No results </div>
+    <% else %>
+    <table id="todos-datatable" style="margin-top:15px; " >
+      <thead>
+        <tr>
+        <%= for col <- colInfo do %>
+          <th><div phx-click="sort" phx-value-coltosort={col.colLabel} style="cursor:pointer"><%=col.colLabel%></div></th>
+        <% end %>
+        </tr>
+      </thead>
+      <tbody>
+
+<%
+#  rows={@streams.todos}
+#  IO.inspect(rows)
+
+    #  for row <- rows do
+    #   %{ _a, _b, data} = row
+    # end
+
+%>
+
+        <%= for todo <- assigns.data do %>
+<%=           classval = case todo.status do
+                    "Completed" -> "bg-green-600 text-white hover:bg-slate-500 hover:text-white"
+                    "Started"   -> "bg-blue-400 text-white hover:bg-slate-500 hover:text-white"
+                    _ -> "hover:bg-slate-500 hover:text-white"
+              end
+              ""
+ %>
+          <tr data-id={todo.id} class={classval}  >
+            <%= for col <- colInfo do %>
+              <% {_, db_value} = Map.fetch(todo, col.dbKey) %>
+              <td style={col.style} onclick="dochildclick(this)"><.link patch={~p"/datatable/#{todo.id}/edit"}><%= db_value %></.link></td>
+            <% end %>
+            <td>
+                <.link
+                  phx-click={JS.push("delete", value: %{id: todo.id}) |> hide("##{todo.id}")}
+                  data-confirm="Are you sure?"
+                >
+                  Delete
+                </.link>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <% end %>
+
+</div>
+
+
+    <script phx-track-static>
+
+    function dochildclick(obj)
+    {
+      obj.firstChild.click();
+    }
+
+    function FlashScreen()
+    {
+      var opacity = 0.2;
+      var gId;
+
+      gId = setInterval( () => {
+        opacity += 0.01;
+        document.body.style.opacity = opacity;
+
+        if (opacity>=1.0)
+          clearInterval(gId)
+      }, 20)
+    }
+
+    setTimeout( () => {
+        var obj = document.getElementById("search");
+        if (obj)
+          obj.focus()
+
+    }, 100);
+
+    </script>
+
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="todo-modal"
+  show
+  on_cancel={JS.navigate(~p"/datatable")}
+>
+  <.live_component
+    module={ExperWeb.DataTableLive.FormComponent}
+    id={@todo.id || :new}
+    title={@page_title}
+    action={@live_action}
+    todo={@todo}
+    patch={~p"/datatable"}
+  />
+</.modal>

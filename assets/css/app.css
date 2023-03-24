@@ -1,0 +1,18 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* This file is for your main application CSS */
+
+#todos-datatable td {
+    padding-left: 13px;
+    padding-right: 13px;
+}
+
+.space-y-8 div {
+    margin-top : 19px !important
+}
+
+div .mt-10 {
+    margin-top : 0px !important;
+}

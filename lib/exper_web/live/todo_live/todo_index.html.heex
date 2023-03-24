@@ -1,0 +1,80 @@
+<.header>
+  Todos
+  <:actions>
+    <.link patch={~p"/todos/new"}>
+      <.button style="background-color:#448844">New Todo</.button>
+    </.link>
+  </:actions>
+</.header>
+
+  <div style="background-color: #3388AA;
+        over-flow:hidden;
+        min-width:99vw;
+        position:absolute; top:0px; left:0px;
+        z-index:-1001;"
+  >
+
+    <div style="background-color:#228877;
+           margin-top:150px; padding:10px;
+           margin-left:25vw;
+           width:50vw;
+           border: 1px solid darkgray; box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);">
+
+
+
+  <.live_component
+    module={ExperWeb.TodoLive.TableComponent}
+    id="todos_new"
+  rows={@streams.todos}
+  row_click={fn {_id, todo} -> JS.navigate(~p"/todos/#{todo}") end}
+  >
+  <:col :let={{_id, todo}} label="Task"><%= todo.task %></:col>
+  <:col :let={{_id, todo}} label="Priority"><%= todo.priority %></:col>
+  <:col :let={{_id, todo}} label="Category"><%= todo.category %></:col>
+  <:col :let={{_id, todo}} label="Status"><%= todo.status %></:col>
+  </.live_component>
+
+
+<.table
+  id="todos"
+  rows={@streams.todos}
+  row_click={fn {_id, todo} -> JS.navigate(~p"/todos/#{todo}") end}
+>
+  <:col :let={{_id, todo}} label="Task"><%= todo.task %></:col>
+  <:col :let={{_id, todo}} label="Priority"><%= todo.priority %></:col>
+  <:col :let={{_id, todo}} label="Category"><%= todo.category %></:col>
+  <:col :let={{_id, todo}} label="Status"><%= todo.status %></:col>
+  <:action :let={{_id, todo}}>
+    <div class="sr-only">
+      <.link navigate={~p"/todos/#{todo}"}>Show</.link>
+    </div>
+    <.link patch={~p"/todos/#{todo}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, todo}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: todo.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+</div>
+</div>
+
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="todo-modal"
+  show
+  on_cancel={JS.navigate(~p"/todos")}
+>
+  <.live_component
+    module={ExperWeb.TodoLive.FormComponent}
+    id={@todo.id || :new}
+    title={@page_title}
+    action={@live_action}
+    todo={@todo}
+    patch={~p"/todos"}
+  />
+</.modal>

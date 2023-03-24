@@ -1,0 +1,72 @@
+
+  <div style="background-color:#FFFFFF ; padding:10px; opacity:0.7; width:670px">
+
+    <.header>
+      Available Jets for sale
+      <:actions>
+        <.link patch={~p"/airplanes/new"}>
+          <.button class="bg-red-800">New Entry</.button>
+        </.link>
+      </:actions>
+    </.header>
+
+    <div style="background-color:#222244; max-height:68vh; overflow:auto;
+           margin-top:10px; padding:10px;
+           border: 1px solid darkgray; box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);">
+    <.table
+      id="airplanes"
+      rows={@streams.airplanes}
+      row_click={fn {_id, airplane} -> JS.navigate(~p"/airplanes/#{airplane}") end}
+    >
+      <:col :let={{_id, airplane}} label="Model"><div style="min-width:100px"><%= airplane.model %></div></:col>
+      <:col :let={{_id, airplane}} label="Year"><%= airplane.year %></:col>
+      <:col :let={{_id, airplane}} label="Price">$<%= Number.Human.number_to_human(airplane.price) %></:col>
+      <:col :let={{_id, airplane}} label="Photo"><img src={airplane.url} style="height:70px"></:col>
+      <:action :let={{_id, airplane}}>
+        <div class="sr-only">
+          <.link navigate={~p"/airplanes/#{airplane}"}>Show</.link>
+        </div>
+        <.link patch={~p"/airplanes/#{airplane}/edit"} style="opacity:0.5; color:white">Edit</.link>
+      </:action>
+      <:action :let={{id, airplane}}>
+        <.link
+          phx-click={JS.push("delete", value: %{id: airplane.id}) |> hide("##{id}")}
+          data-confirm="Are you sure?"
+           style="opacity:0.5; color:white"
+        >
+          Delete
+        </.link>
+      </:action>
+    </.table>
+    </div>
+  </div>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="airplane-modal"
+  show
+  on_cancel={JS.navigate(~p"/airplanes")}
+>
+  <.live_component
+    module={ExperWeb.AirplaneLive.FormComponent}
+    id={@airplane.id || :new}
+    title={@page_title}
+    action={@live_action}
+    airplane={@airplane}
+    patch={~p"/airplanes"}
+  />
+</.modal>
+
+    <div id="backgroundXXX" style="display:none">planebg.jpg</div>
+
+  <div
+      id="bgElement"
+      style="background-image: url('/assets/i/planebg.jpg');
+        min-height:100vh; min-width:100vw;
+        over-flow:hidden;
+        position:absolute; top:0px; left:0px;
+        background-size: cover;
+        opacity:.5;
+        z-index:-1000"
+  >
+  </div>

@@ -1,0 +1,47 @@
+  <div id="bgElement"
+      style="background-image: url('/assets/i/pacman.jpg');
+        min-height:100vh; min-width:100vw;
+        over-flow:hidden;
+        position:absolute; top:0px; left:0px;
+        background-repeat: repeat;
+        background-color: slate;
+        background-attachment: fixed;
+        opacity:.8;
+        z-index:-1002"
+  ></div>
+
+    <div>
+      <.form :let={_} for={@chgSetForForms} phx-change={:search} phx-target="">
+      <.input id="search" name="search" value="" type="text" placeholder="Search..." phx-debounce="50" />
+      </.form>
+    </div>
+    <div onclick="GetUpdate()" id="ShowMe" style="background-color:white; min-width:100px; min-height:50px"><%=@feedback %>
+    stuff</div>
+
+<script>
+
+  function GetUpdate()
+  {
+    event = document.createEvent("HTMLEvents");
+    event.initEvent("Special", true, true);
+    event.eventName = "Special";
+
+    SpecialField = document.getElementById("search")
+    SpecialField.dispatchEvent(event);
+  }
+
+  setTimeout( () => {
+      SpecialField = document.getElementById("search")
+
+      SpecialField.addEventListener("Special", (event) => {
+
+      const customEvent = new CustomEvent("phx-change", {
+        bubbles: true,
+        detail: { value: event.target.value },
+      });
+      alert(7)
+      event.target.dispatchEvent(customEvent);
+    });
+  }, 500);
+
+</script>

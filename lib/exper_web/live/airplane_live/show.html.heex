@@ -1,0 +1,56 @@
+<.header>
+  <strong> <%= @airplane.model %></strong>
+  <:actions>
+    <.link patch={~p"/airplanes/#{@airplane}/show/edit"} phx-click={JS.push_focus()}>
+      <.button style="background-color:navy">Modify</.button>
+    </.link>
+  </:actions>
+</.header>
+
+  <div id="background___" style="display:none">planebg.jpg</div>
+  <div id="bgElement"
+      style="background-image: url('/assets/i/planebg.jpg');
+        min-height:100vh; min-width:100vw;
+        over-flow:hidden;
+        position:absolute; top:0px; left:0px;
+        background-size: cover;
+        opacity:.5;
+        z-index:-1000"
+  >
+  </div>
+
+
+<.list>
+  <:item title="Photo">
+    <.link patch={~p"/airplanes/#{@airplane}/show/view"} phx-click={JS.push_focus()}>
+      <img src={@airplane.url} style="height:300px">
+    </.link>
+  </:item>
+  <:item title="Year"><%=@airplane.year%></:item>
+  <:item title="Price"><%=Number.Human.number_to_human(@airplane.price)%></:item>
+</.list>
+
+<.back navigate={~p"/airplanes"}>Back to listing</.back>
+
+<.modal :if={@live_action == :edit} id="airplane-modal" show on_cancel={JS.patch(~p"/airplanes/#{@airplane}")}>
+  <.live_component
+    module={ExperWeb.AirplaneLive.FormComponent}
+    id={@airplane.id}
+    title={@page_title}
+    action={@live_action}
+    airplane={@airplane}
+    patch={~p"/airplanes/#{@airplane}"}
+  />
+</.modal>
+
+  <.live_component
+    module={ExperWeb.AirplaneLive.ModalSpecial}
+    :if={@live_action == :view} id="airplane-view-modal-special" show on_cancel={JS.patch(~p"/airplanes/#{@airplane}")}
+    url={@airplane.url}
+    title={[]}
+    action={@live_action}
+    airplane={@airplane}
+    patch={~p"/airplanes/#{@airplane}"}
+  >
+  <img src={@airplane.url} style="height:80vh">
+  </.live_component>
