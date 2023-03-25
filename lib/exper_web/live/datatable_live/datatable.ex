@@ -99,40 +99,6 @@ defmodule ExperWeb.DataTableLive.DatatableIndex do
     {:noreply, reloadData(socket)}
   end
 
-#----------------------------------
-
-
-  def build_ordered_list_for_CSV( fields, single_map_record ) do
-      fieldDataInOrder = Enum.map(fields, fn field ->
-                                        valS = Map.get( single_map_record,field, nil)
-                                        valS = "#{valS}"
-                                        if String.at(valS, 0) == '"', do: valS, else: "\"" <> valS <> "\""
-                                      end)
-
-      fieldDataInOrder
-  end
-
-  # def testordering() do
-  #   testmap = [
-  #       %{ :priority => "Important!", :task => "App: stuff one", :status => "Not Yet Started"},
-  #       %{ :priority => "whatever", :task => "Thing 2", :status => "Completed"}
-  #   ]
-
-  #   Enum.map(testmap, fn amap -> build_ordered_list( amap) end)
-  # #  build_ordered_list( testmap)
-  # end
-
-  def data_to_ordered_CSV do
-    data = Library.list_todos
-
-    fields = [ :task, :priority, :status]
-
-    Enum.map( data, fn amap -> build_ordered_list_for_CSV( fields, amap) end)
-    |> Enum.map( fn orderedRecord -> Enum.join(orderedRecord, ",") end)
-    |> Enum.join("\n")
-  end
-
-#------------------------------------------
 
   @impl true
   def handle_event("backup-to-csv-ordered", _, socket) do
@@ -193,6 +159,46 @@ defmodule ExperWeb.DataTableLive.DatatableIndex do
     IO.puts("disabled")
 #    csv_row_to_table_record("/mnt/e/srcbk/todos-export.csv")
   end
+
+
+  #----------------------------------
+
+
+  def build_ordered_list_for_CSV( fields, single_map_record ) do
+    fieldDataInOrder = Enum.map(fields, fn field ->
+                                      valS = Map.get( single_map_record,field, nil)
+                                      valS = "#{valS}"
+                                      if String.at(valS, 0) == '"', do: valS, else: "\"" <> valS <> "\""
+                                    end)
+
+    fieldDataInOrder
+end
+
+# def testordering() do
+#   testmap = [
+#       %{ :priority => "Important!", :task => "App: stuff one", :status => "Not Yet Started"},
+#       %{ :priority => "whatever", :task => "Thing 2", :status => "Completed"}
+#   ]
+
+#   Enum.map(testmap, fn amap -> build_ordered_list( amap) end)
+# #  build_ordered_list( testmap)
+# end
+
+def data_to_ordered_CSV do
+  data = Library.list_todos
+
+  fields = [ :task, :priority, :status]
+
+  Enum.map( data, fn amap -> build_ordered_list_for_CSV( fields, amap) end)
+  |> Enum.map( fn orderedRecord -> Enum.join(orderedRecord, ",") end)
+  |> Enum.join("\n")
+end
+
+#------------------------------------------
+
+def ellipsis(s, slen) do
+  if (String.length(s) >slen), do: String.slice(s, 0, slen) <> "...", else: s
+end
 
 
 def create_or_skip(row) do

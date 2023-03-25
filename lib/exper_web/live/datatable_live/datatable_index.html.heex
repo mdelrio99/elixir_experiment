@@ -81,7 +81,7 @@
           <tr data-id={todo.id} class={classval}  >
             <%= for col <- colInfo do %>
               <% {_, db_value} = Map.fetch(todo, col.dbKey) %>
-              <td style={col.style} onclick="dochildclick(this)"><.link patch={~p"/datatable/#{todo.id}/edit"}><%= db_value %></.link></td>
+              <td style={col.style} onclick="dochildclick(this)"><.link patch={~p"/datatable/#{todo.id}/edit"}><%= ellipsis(db_value, 45) %></.link></td>
             <% end %>
             <td>
                 <.link
