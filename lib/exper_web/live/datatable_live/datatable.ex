@@ -94,7 +94,7 @@ defmodule ExperWeb.DataTableLive.DatatableIndex do
 
   @impl true
   def handle_event("import-from-csv", _, socket) do
-    csv_row_to_table_record("/mnt/e/srcbk/todos-export.csv")
+    csv_row_to_table_record("/tmp/todos-export-ordered.csv")
 
     {:noreply, reloadData(socket)}
   end
@@ -117,7 +117,7 @@ defmodule ExperWeb.DataTableLive.DatatableIndex do
     |> Enum.map( fn orderedRecord -> Enum.join(orderedRecord, ",") end)
     |> Enum.join("\n")
 
-    file = File.open!("/mnt/e/srcbk/todos-export-ordered.csv", [:write, :utf8])
+    file = File.open!("/tmp/todos-export-ordered.csv", [:write, :utf8])
     IO.write(file, headerRow <> "\n" <> csvData)
     File.close(file)
 
@@ -146,7 +146,7 @@ defmodule ExperWeb.DataTableLive.DatatableIndex do
     csv_data    = CSV.encode(quoted_data, quote: "'", escape: "\\", headers: false)
 
 #####
-    file = File.open!("/mnt/e/srcbk/todos-export.csv", [:write, :utf8])
+    file = File.open!("/tmp/todos-export.csv", [:write, :utf8])
     IO.write(file, Enum.join(headerRow, ",") <> "\n")
     Enum.each(csv_data, &(IO.write(file, String.replace(&1, ~r"\"{3}", "\"") )))
     File.close(file)
@@ -164,7 +164,7 @@ defmodule ExperWeb.DataTableLive.DatatableIndex do
   #----------------------------------
 
 
-  def build_ordered_list_for_CSV( fields, single_map_record ) do
+  defp build_ordered_list_for_CSV( fields, single_map_record ) do
     fieldDataInOrder = Enum.map(fields, fn field ->
                                       valS = Map.get( single_map_record,field, nil)
                                       valS = "#{valS}"

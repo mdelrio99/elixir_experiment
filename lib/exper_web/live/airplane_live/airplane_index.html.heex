@@ -7,6 +7,8 @@
         <.link patch={~p"/airplanes/new"}>
           <.button class="bg-red-800">New Entry</.button>
         </.link>
+      <.button style="background-color:#888888; line-height:18px" phx-click="backup-to-csv-ordered" onclick="FlashScreen()">Backup</.button>
+      <.button style="background-color:#888888; line-height:18px" phx-click="import-from-csv" onclick="FlashScreen()">Import</.button>
       </:actions>
     </.header>
 
@@ -70,3 +72,22 @@
         z-index:-1000"
   >
   </div>
+
+    <script phx-track-static>
+
+    function FlashScreen()
+    {
+      var opacity = 0.2;
+      var gId;
+
+      gId = setInterval( () => {
+        opacity += 0.01;
+        document.body.style.opacity = opacity;
+
+        if (opacity>=1.0)
+          clearInterval(gId)
+      }, 20)
+    }
+
+
+    </script>
