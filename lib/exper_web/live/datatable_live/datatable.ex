@@ -164,7 +164,7 @@ defmodule ExperWeb.DataTableLive.DatatableIndex do
   #----------------------------------
 
 
-  defp build_ordered_list_for_CSV( fields, single_map_record ) do
+  def build_ordered_list_for_CSV( fields, single_map_record ) do
     fieldDataInOrder = Enum.map(fields, fn field ->
                                       valS = Map.get( single_map_record,field, nil)
                                       valS = "#{valS}"
