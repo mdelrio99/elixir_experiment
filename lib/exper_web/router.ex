@@ -14,6 +14,10 @@ defmodule ExperWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :csv do
+    plug :accepts, ["plain", "csv", "text"]
+  end
+
   scope "/", ExperWeb do
     pipe_through :browser
 
@@ -40,6 +44,8 @@ defmodule ExperWeb.Router do
     live "/airplanes/:id/show/edit", AirplaneLive.Show, :edit
     live "/airplanes/:id/show/view", AirplaneLive.Show, :view
 
+    live "/airplanes/import/populate", AirplaneLive.FormPopulate, :new
+
 
     live "/todos", TodoLive.TodoIndex, :index
     live "/todos/new", TodoLive.TodoIndex, :new
@@ -52,6 +58,8 @@ defmodule ExperWeb.Router do
     live "/datatable/new", DataTableLive.DatatableIndex, :new
     live "/datatable/:id/edit", DataTableLive.DatatableIndex, :edit
 
+    live "/datatable/populate", DataTableLive.FormPopulate, :new
+
     live "/ftest", FtestLive.Index, :index
   end
 
@@ -62,6 +70,12 @@ defmodule ExperWeb.Router do
     resources "/books", BookController, except: [:new, :edit]
     resources "/todos", TodoController, except: [:new, :edit]
     resources "/todos/:id", TodoController, except: [:new, :edit]
+  end
+
+  scope "/csv", ExperWeb do
+    pipe_through :csv
+
+    resources "/todos", CSVPostImportTodosController
   end
 
 

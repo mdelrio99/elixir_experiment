@@ -19,6 +19,11 @@ defmodule ExperWeb do
 
   def static_paths, do: ~w(assets fonts images favicon.ico robots.txt)
 
+  def cdn_url(filename) do
+    "https://cdn-4gm.pages.dev/i/" <> filename
+#    "/assets/i/" <> filename
+  end
+
   def router do
     quote do
       use Phoenix.Router, helpers: false

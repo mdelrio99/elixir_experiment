@@ -8,7 +8,10 @@
           <.button class="bg-red-800">New Entry</.button>
         </.link>
       <.button style="background-color:#888888; line-height:18px" phx-click="backup-to-csv-ordered" onclick="FlashScreen()">Backup</.button>
-      <.button style="background-color:#888888; line-height:18px" phx-click="import-from-csv" onclick="FlashScreen()">Import</.button>
+      <.button style="background-color:#888888; line-height:18px" phx-click="import-from-csv" onclick="FlashScreen()">Import (/tmp)</.button>
+    <.link patch={~p"/airplanes/import/populate"}>
+      <.button style="background-color:#888888; line-height:18px">Import</.button>
+    </.link>
       </:actions>
     </.header>
 
@@ -59,17 +62,21 @@
   />
 </.modal>
 
-    <div id="backgroundXXX" style="display:none">planebg.jpg</div>
 
-  <div
-      id="bgElement"
-      style="background-image: url('https://54c272a7.cdn-4gm.pages.dev/i/planebg.jpg');
+<%=
+    css_style="background-image: url(" <> ExperWeb.cdn_url("planebg.jpg") <> ");
         min-height:100vh; min-width:100vw;
         over-flow:hidden;
         position:absolute; top:0px; left:0px;
         background-size: cover;
         opacity:.5;
         z-index:-1000"
+  ""
+   %>
+
+  <div
+      id="bgElement"
+      style={css_style}
   >
   </div>
 

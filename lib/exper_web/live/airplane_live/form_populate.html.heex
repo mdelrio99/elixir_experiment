@@ -1,0 +1,12 @@
+<.header>
+  Bulk Import Airplanes
+  <:subtitle>Paste Import here</:subtitle>
+</.header>
+
+<form phx-submit="submitForm" style="margin-top:30px">
+  <label for="importedCSV">CSV to Import:</label><br>
+  <textarea name="importedCSV" id="importedCSV" cols="100" rows="15"></textarea>
+  <.button type="submit">Submit</.button>
+</form>
+
+<.back navigate={~p"/airplanes"}>Back to airplanes</.back>
