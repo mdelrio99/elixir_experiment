@@ -22,7 +22,7 @@ end
 
 if config_env() == :prod do
 
-#  database_url = "ecto://postgres:admin@Bang-Olufsen-17:5432/exper_dev"
+  database_url = "ecto://postgres:admin@Bang-Olufsen-17:5432/exper_dev"
 
   database_url =
     System.get_env("DATABASE_URL") ||

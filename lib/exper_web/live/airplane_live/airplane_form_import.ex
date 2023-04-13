@@ -32,29 +32,81 @@ end
 #  def handle_event("submitForm", value, socket) do
 
 
-    parsed_data = CSV2.parse_string(importedCSV)
+  {:ok, file} = File.open("/tmp/csv_test.csv", [:write])
 
-    alldata = String.split(importedCSV, "\n")
+  IO.puts(file, importedCSV)
 
-    {column_names_str, remainder} = List.pop_at(alldata, 0)
+  :ok = File.close(file)
 
-    column_names_first = String.split(column_names_str, ",")
- #   IO.inspect(column_names)
+  results = "/tmp/csv_test.csv"
+  |> Path.expand(__DIR__)
+  |> File.stream!([:trim_bom])
+  |> CSV.decode()
+  |> Enum.take(1000000)
 
-    column_names = [:id, :model, :year, :url, :price]
-#    column_names = [:id, :task, :description, :priority, :status, :category, :datecompleted]
+  #IO.inspect( results )
 
-     parsed_data
-     |> Enum.map(fn row ->
-       row
-       |> Enum.with_index()
-       |> Map.new(fn {val, num} -> {Enum.at(column_names,num), val} end)
-       |> create_or_skip()
-     end)
+  error_stats = Enum.reduce(results, {"", 0, 0},
+    fn (element, {error_messages, acc, linenum}) ->
+
+      case element do
+        {:ok, _data} -> {error_messages, acc, linenum+1}
+        {:error, message} ->
+#          IO.puts("Error: #{inspect message}")
+          {error_messages <> "|" <> message, acc+1, linenum+1}
+      end
+
+  end)
 
 
-    {:noreply, socket}
-  end
+
+  # stream = importedCSV
+  #       |> String.to_charlist()
+  #       |> Stream.cycle()
+
+  # IO.inspect(
+  #     stream
+  #       |> CSV.decode()
+  # )
+
+
+
+      # redirect to the success page
+      case elem(error_stats, 1) do
+        0 ->
+            parsed_data = CSV2.parse_string(importedCSV)
+
+            alldata = String.split(importedCSV, "\n")
+
+            {column_names_str, remainder} = List.pop_at(alldata, 0)
+
+            column_names_first = String.split(column_names_str, ",")
+        #   IO.inspect(column_names)
+
+            column_names = [:id, :model, :year, :url, :price]
+        #    column_names = [:id, :task, :description, :priority, :status, :category, :datecompleted]
+
+
+            parsed_data
+            |> Enum.map(fn row ->
+              row
+              |> Enum.with_index()
+              |> Map.new(fn {val, num} -> {Enum.at(column_names,num), val} end)
+              |> create_or_skip()
+            end)
+
+          {:noreply,
+          socket
+            |> put_flash(:info, "Import Success!")
+            |> redirect(to: "/airplanes")}
+        _ ->
+          {:noreply,
+          socket
+            |> put_flash(:error, "There were errors Importing!: \n \n" <> elem(error_stats, 0))
+      }
+      end
+
+    end
 
 
   defp page_title(:new), do: "Post Airplanes"

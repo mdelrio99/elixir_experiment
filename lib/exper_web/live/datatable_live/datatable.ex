@@ -113,7 +113,7 @@ defmodule ExperWeb.DataTableLive.DatatableIndex do
       |> Enum.map(  fn x -> "\"" <> Atom.to_string(x) <> "\"" end)
       |> Enum.join(",")
 
-    csvData = Enum.map( Library.list_todos, fn amap -> build_ordered_list_for_CSV( fields_to_export, amap) end)
+    csvData = Enum.map( Library.list_todos, fn amap -> Exper.build_ordered_list_for_CSV( fields_to_export, amap) end)
     |> Enum.map( fn orderedRecord -> Enum.join(orderedRecord, ",") end)
     |> Enum.join("\n")
 
@@ -164,15 +164,7 @@ defmodule ExperWeb.DataTableLive.DatatableIndex do
   #----------------------------------
 
 
-  def build_ordered_list_for_CSV( fields, single_map_record ) do
-    fieldDataInOrder = Enum.map(fields, fn field ->
-                                      valS = Map.get( single_map_record,field, nil)
-                                      valS = "#{valS}"
-                                      if String.at(valS, 0) == '"', do: valS, else: "\"" <> valS <> "\""
-                                    end)
 
-    fieldDataInOrder
-end
 
 # def testordering() do
 #   testmap = [
@@ -189,7 +181,7 @@ def data_to_ordered_CSV do
 
   fields = [ :task, :priority, :status]
 
-  Enum.map( data, fn amap -> build_ordered_list_for_CSV( fields, amap) end)
+  Enum.map( data, fn amap -> Exper.build_ordered_list_for_CSV( fields, amap) end)
   |> Enum.map( fn orderedRecord -> Enum.join(orderedRecord, ",") end)
   |> Enum.join("\n")
 end

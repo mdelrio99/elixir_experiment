@@ -22,7 +22,8 @@ defmodule ExperWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
-    get "/export_todos", ExportController, :create
+    get "/export_airplanes", ExportAirplanesController, :create
+    get "/export_todos", ExportTodosController, :create
 
 
     live "/main", MainLive.MainIndex, :index

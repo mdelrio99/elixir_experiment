@@ -52,8 +52,7 @@ end
        |> create_or_skip()
      end)
 
-
-    {:noreply, socket}
+     {:noreply, redirect(socket, to: "/datatable")}
   end
 
 

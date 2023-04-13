@@ -46,10 +46,6 @@ defmodule ExperWeb.AirplaneLive.AirplaneIndex do
     {:noreply, stream_delete(socket, :airplanes, airplane)}
   end
 
-  defp reloadData(s) do
-    s
-  end
-
 
   @impl true
   def handle_event("import-from-csv", _, socket) do
@@ -72,7 +68,7 @@ defmodule ExperWeb.AirplaneLive.AirplaneIndex do
       |> Enum.map(  fn x -> "\"" <> Atom.to_string(x) <> "\"" end)
       |> Enum.join(",")
 
-    csvData = Enum.map( Library.list_airplanes, fn amap -> build_ordered_list_for_CSV( fields_to_export, amap) end)
+    csvData = Enum.map( Library.list_airplanes, fn amap -> Exper.build_ordered_list_for_CSV( fields_to_export, amap) end)
     |> Enum.map( fn orderedRecord -> Enum.join(orderedRecord, ",") end)
     |> Enum.join("\n")
 
@@ -84,15 +80,20 @@ defmodule ExperWeb.AirplaneLive.AirplaneIndex do
   end
 
 
-  defp build_ordered_list_for_CSV( fields, single_map_record ) do
-    fieldDataInOrder = Enum.map(fields, fn field ->
-                                      valS = Map.get( single_map_record,field, nil)
-                                      valS = "#{valS}"
-                                      if String.at(valS, 0) == '"', do: valS, else: "\"" <> valS <> "\""
-                                    end)
+  defp reloadData(s) do
+    s
+  end
 
-    fieldDataInOrder
-end
+
+#   defp build_ordered_list_for_CSV( fields, single_map_record ) do
+#     fieldDataInOrder = Enum.map(fields, fn field ->
+#                                       valS = Map.get( single_map_record,field, nil)
+#                                       valS = "#{valS}"
+#                                       if String.at(valS, 0) == '"', do: valS, else: "\"" <> valS <> "\""
+#                                     end)
+
+#     fieldDataInOrder
+# end
 
 
   def create_or_skip(row) do

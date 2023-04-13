@@ -3,9 +3,17 @@
   <:subtitle>Paste Import here</:subtitle>
 </.header>
 
+ <div style="background-color: lightgray;
+          min-height:130vh; min-width:100vw;
+        over-flow:hidden;
+        position:absolute; top:0px; left:0px;
+        z-index:-1001"
+  >
+  </div>
+
 <form phx-submit="submitForm" style="margin-top:30px">
   <label for="importedCSV">CSV to Import:</label><br>
-  <textarea name="importedCSV" id="importedCSV" cols="100" rows="15"></textarea>
+  <textarea name="importedCSV" id="importedCSV" cols="150" rows="20" style="font-size:11px;padding:3px;line-height:13px"></textarea>
   <.button type="submit">Submit</.button>
 </form>
 

@@ -50,7 +50,7 @@ defmodule Exper.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:csv, "~> 2.4"},
+      {:csv, "~> 3.0.5"},
       {:nimble_csv, "~> 1.1.0"},
       {:number, "~> 1.0"}
     ]

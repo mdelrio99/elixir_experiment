@@ -16,5 +16,9 @@ defmodule Exper.Library.Airplane do
     airplane
     |> cast(attrs, [:model, :year, :url, :price])
     |> validate_required([:model, :year, :url, :price])
+    |> unique_constraint(
+      :model,
+      name: :index_for_models_duplicate_entries
+    )
   end
 end

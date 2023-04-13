@@ -18,5 +18,9 @@ defmodule Exper.Library.Todo do
     todo
     |> cast(attrs, [:task, :description, :priority, :status, :category, :datecompleted])
     |> validate_required([:task, :priority])
+    |> unique_constraint(
+      :task,
+      name: :index_for_todos_duplicate_entries
+    )
   end
 end

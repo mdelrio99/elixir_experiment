@@ -1,11 +1,11 @@
-defmodule ExperWeb.ExportTodosController do
+defmodule ExperWeb.ExportAirplanesController do
   use ExperWeb, :controller
 
 #  alias CsvdownWeb.Customers
   alias Exper.Library
 
   def create(conn, _params) do
-    fields_to_export = [:task, :description, :priority, :status, :category, :datecompleted]
+    fields_to_export = [:id, :model, :year, :url, :price]
 
 #    headerPortion = Library.list_todos
 #    |> Enum.map(fn x -> Map.keys  (Map.take(x, fields_to_export)) end)
@@ -15,7 +15,7 @@ defmodule ExperWeb.ExportTodosController do
       |> Enum.map(  fn x -> "\"" <> Atom.to_string(x) <> "\"" end)
       |> Enum.join(",")
 
-    csvData = Enum.map( Library.list_todos, fn amap ->
+    csvData = Enum.map( Library.list_airplanes, fn amap ->
           Exper.build_ordered_list_for_CSV( fields_to_export, amap) end)
     |> Enum.map( fn orderedRecord -> Enum.join(orderedRecord, ",") end)
     |> Enum.join("\n")
@@ -23,7 +23,7 @@ defmodule ExperWeb.ExportTodosController do
 
     conn
     |> put_resp_content_type("text/csv")
-    |> put_resp_header("content-disposition", "attachment; filename=\"todos-export.csv\"")
+    |> put_resp_header("content-disposition", "attachment; filename=\"airplanes-export.csv\"")
 #    |> put_root_layout(false)
     |> send_resp(200, headerRow <> "\n" <> csvData)
   end

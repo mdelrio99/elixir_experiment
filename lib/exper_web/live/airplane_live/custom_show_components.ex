@@ -1,7 +1,7 @@
 defmodule ExperWeb.AirplaneLive.ModalSpecial do
   use ExperWeb, :live_component
 
-  alias Exper.Library
+#  alias Exper.Library
 
   def render(assigns) do
     #assigns.id
