@@ -45,7 +45,7 @@ defmodule ExperWeb.Router do
     live "/airplanes/:id/show/edit", AirplaneLive.Show, :edit
     live "/airplanes/:id/show/view", AirplaneLive.Show, :view
 
-    live "/airplanes/import/populate", AirplaneLive.FormPopulate, :new
+    live "/airplanes/import/populate", AirplaneLive.FormPopulate, :index
 
 
     live "/todos", TodoLive.TodoIndex, :index

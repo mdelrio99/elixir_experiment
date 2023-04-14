@@ -17,7 +17,7 @@ defmodule ExperWeb do
   those modules here.
   """
 
-  def static_paths, do: ~w(assets fonts images i favicon.ico robots.txt)
+  def static_paths, do: ~w(assets fonts images i js favicon.ico robots.txt)
 
   def cdn_url(filename) do
 #    "https://cdn-4gm.pages.dev/i/" <> filename

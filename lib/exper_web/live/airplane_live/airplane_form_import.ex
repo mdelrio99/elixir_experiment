@@ -6,6 +6,8 @@ defmodule ExperWeb.AirplaneLive.FormPopulate do
 
   @impl true
   def mount(_params, _session, socket) do
+
+#    {:ok, push_event(socket, "call_JS", %{data: "a lot of stuff goes here"})}
     {:ok, socket}
   end
 
@@ -14,6 +16,9 @@ defmodule ExperWeb.AirplaneLive.FormPopulate do
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
+     |> assign(:csv_data, "")
+     |> assign(:csv_line_error_info, "1,2")
+     |> assign(:csv_detailed_error_info, "stuff")
      }
   end
 
@@ -46,14 +51,14 @@ end
 
   #IO.inspect( results )
 
-  error_stats = Enum.reduce(results, {"", 0, 0},
-    fn (element, {error_messages, acc, linenum}) ->
+  error_stats = Enum.reduce(results, {"", 0, 0, ""},
+    fn (element, {error_messages, acc, linenum, lines_w_errs}) ->
 
       case element do
-        {:ok, _data} -> {error_messages, acc, linenum+1}
+        {:ok, _data} -> {error_messages, acc, linenum+1, lines_w_errs}
         {:error, message} ->
 #          IO.puts("Error: #{inspect message}")
-          {error_messages <> "|" <> message, acc+1, linenum+1}
+          {error_messages <> "|" <> message, acc+1, linenum+1, lines_w_errs <> "|" <> Integer.to_string(linenum+1)}
       end
 
   end)
@@ -95,6 +100,7 @@ end
               |> create_or_skip()
             end)
 
+
           {:noreply,
           socket
             |> put_flash(:info, "Import Success!")
@@ -102,13 +108,19 @@ end
         _ ->
           {:noreply,
           socket
-            |> put_flash(:error, "There were errors Importing!: \n \n" <> elem(error_stats, 0))
-      }
+          |> assign(:csv_data, importedCSV)
+          |> assign(:csv_line_error_info, elem(error_stats, 3))
+          |> assign(:csv_detailed_error_info, elem(error_stats, 0))
+          |> put_flash(:error, "There were errors Importing!" )
+          |> push_event( "show_csv_errors", %{lineinfo: elem(error_stats, 3), msgs: elem(error_stats, 0)})}
       end
 
     end
 
+    def handle_event("jsEventToPhx", _params, socket) do
+      {:reply, %{hello: "world"}, socket}
+    end
 
-  defp page_title(:new), do: "Post Airplanes"
+  defp page_title(:index), do: "Post Airplanes"
 
 end
