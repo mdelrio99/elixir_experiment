@@ -59,7 +59,11 @@ defmodule ExperWeb.Router do
     live "/datatable/new", DataTableLive.DatatableIndex, :new
     live "/datatable/:id/edit", DataTableLive.DatatableIndex, :edit
 
-    live "/datatable/populate", DataTableLive.FormPopulate, :new
+    live "/datatable/import/populate", DataTableLive.FormPopulate, :index
+
+    live "/games", GameLive.GameIndex, :index
+
+    live "/tools", ToolsLive.ToolsIndex, :index
 
     live "/ftest", FtestLive.Index, :index
   end
@@ -71,6 +75,8 @@ defmodule ExperWeb.Router do
     resources "/books", BookController, except: [:new, :edit]
     resources "/todos", TodoController, except: [:new, :edit]
     resources "/todos/:id", TodoController, except: [:new, :edit]
+
+    resources "/airplanes", AirplaneController, except: [:new, :edit]
   end
 
   scope "/csv", ExperWeb do

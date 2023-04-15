@@ -6,8 +6,6 @@ defmodule ExperWeb.AirplaneLive.FormPopulate do
 
   @impl true
   def mount(_params, _session, socket) do
-
-#    {:ok, push_event(socket, "call_JS", %{data: "a lot of stuff goes here"})}
     {:ok, socket}
   end
 
@@ -15,10 +13,8 @@ defmodule ExperWeb.AirplaneLive.FormPopulate do
   def handle_params(_, _, socket) do
     {:noreply,
      socket
-     |> assign(:page_title, page_title(socket.assigns.live_action))
      |> assign(:csv_data, "")
-     |> assign(:csv_line_error_info, "1,2")
-     |> assign(:csv_detailed_error_info, "stuff")
+     |> assign(:page_title, page_title(socket.assigns.live_action))
      }
   end
 
@@ -109,8 +105,6 @@ end
           {:noreply,
           socket
           |> assign(:csv_data, importedCSV)
-          |> assign(:csv_line_error_info, elem(error_stats, 3))
-          |> assign(:csv_detailed_error_info, elem(error_stats, 0))
           |> put_flash(:error, "There were errors Importing!" )
           |> push_event( "show_csv_errors", %{lineinfo: elem(error_stats, 3), msgs: elem(error_stats, 0)})}
       end

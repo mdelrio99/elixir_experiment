@@ -7,9 +7,10 @@
         <.link patch={~p"/airplanes/new"}>
           <.button class="bg-red-800">New Entry</.button>
         </.link>
-      <.button style="background-color:#888888; line-height:18px" phx-click="backup-to-csv-ordered" onclick="FlashScreen()">Backup</.button>
-      <.button style="background-color:#888888; line-height:18px" phx-click="import-from-csv" onclick="FlashScreen()">Import (/tmp)</.button>
-          <.button style="background-color:#888888; line-height:18px" onclick="window.location='/airplanes/import/populate'">Import</.button>
+      <.button style="display:none; background-color:#888888; line-height:18px" phx-click="backup-to-csv-ordered" onclick="FlashScreen()">Backup</.button>
+      <.button style="background-color:#888888; line-height:18px" onclick="window.location='/export_airplanes'">Export</.button>
+      <.button style="display:none; background-color:#888888; line-height:18px" phx-click="import-from-csv" onclick="FlashScreen()">Import (/tmp)</.button>
+      <.button style="background-color:#888888; line-height:18px" onclick="window.location='/airplanes/import/populate'">Import</.button>
       </:actions>
     </.header>
 

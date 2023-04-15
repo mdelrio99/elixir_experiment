@@ -60,6 +60,7 @@ defmodule Exper.Library do
   """
   def get_book!(id), do: Repo.get!(Book, id)
   def get_airplane!(id), do: Repo.get!(Airplane, id)
+  def get_airplane(id), do: Repo.get(Airplane, id)
   def get_todo!(id), do: Repo.get!(Todo, id)
   def get_todo(id), do: Repo.get(Todo, id)
 

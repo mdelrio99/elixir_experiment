@@ -4,12 +4,14 @@
     <div style="padding:20px; color:#FFFFEE">
       <ul>
       <li><.link navigate={~p"/airplanes"}>&#x2022; Airplanes</.link></li>
-      <li><.link navigate={~p"/export_airplanes"}>&#x2022; Airplanes as CSV</.link></li>
       <li><.link navigate={~p"/todos"} style="color:#d4bcba">&#x2022; Todos (newbie)</.link></li>
-      <li><.link navigate={~p"/datatable"}>&#x2022; Todos as Datatable</.link></li>
-      <li><.link navigate={~p"/api/todos"}>&#x2022; Todos as API</.link></li>
-      <li><.link navigate={~p"/export_todos"}>&#x2022; Todos as CSV</.link></li>
+      <li><.link navigate={~p"/datatable"}>&#x2022; Todos</.link></li>
+      <li>&#x2022; <span onclick="ToggleAPIs()" style="cursor:pointer">APIs</span></li>
+      <li><.link navigate={~p"/api/airplanes"}>&#8594; Airplanes</.link></li>
+      <li><.link navigate={~p"/api/todos"}>&#8594; Todos</.link></li>
       <li><.link navigate={~p"/anim"}>&#x2022; Animated Stuff</.link></li>
+      <li><.link navigate={~p"/games"}>&#x2022; Game Repo</.link></li>
+      <li><.link navigate={~p"/tools"}>&#x2022; Tools Used</.link></li>
       </ul>
     </div>
 
@@ -29,3 +31,10 @@
       id="bgElement"
       style={css_style} >
   </div>
+
+<script>
+    function ToggleAPIs()
+    {
+        alert(1)
+    }
+</script>
