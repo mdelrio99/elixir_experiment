@@ -8,7 +8,8 @@ defmodule ExperWeb.Endpoint do
     store: :cookie,
     key: "_exper_key",
     signing_salt: "F++z+E8j",
-    same_site: "Lax"
+    same_site: "None"
+    #used to be Lax
   ]
 
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
